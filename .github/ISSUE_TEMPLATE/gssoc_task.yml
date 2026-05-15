@@ -1,0 +1,31 @@
+name: 🎯 GSSoC Task Request
+description: Request to work on a specific GSSoC task or suggest a new one
+title: "[GSSoC-26]: <Task Name>"
+labels: ["gssoc-26", "help wanted"]
+body:
+  - type: dropdown
+    id: level
+    attributes:
+      label: Task Level
+      description: Select the complexity level of the task
+      options:
+        - Level 1 (Easy / Documentation)
+        - Level 2 (Intermediate / UI / Features)
+        - Level 3 (Advanced / Logic / Backend)
+    validations:
+      required: true
+  - type: textarea
+    id: assignment
+    attributes:
+      label: Assignment Request
+      description: Are you requesting this issue to be assigned to you?
+      value: "I would like to work on this issue. Please assign it to me."
+    validations:
+      required: true
+  - type: textarea
+    id: contribution-plan
+    attributes:
+      label: How do you plan to contribute?
+      description: Briefly describe your approach to solving this issue.
+    validations:
+      required: true
