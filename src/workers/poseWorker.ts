@@ -119,34 +119,29 @@ function drawSkeleton(landmarks: any[], status: string, primaryJoints: number[])
     [23, 25], [25, 27], [24, 26], [26, 28], // Lower
   ];
 
-  ctx.lineWidth = 2;
-  ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
+  const baseLinePath = new Path2D();
+  const highlightPath = new Path2D();
+
   connections.forEach(([i, j]) => {
     const a = landmarks[i];
     const b = landmarks[j];
     if (a && b && a.visibility > 0.5 && b.visibility > 0.5) {
-      ctx.beginPath();
-      ctx.moveTo(a.x * width, a.y * height);
-      ctx.lineTo(b.x * width, b.y * height);
-      ctx.stroke();
+      const isPrimary = primaryJoints.includes(i) || primaryJoints.includes(j);
+      const targetPath = isPrimary ? highlightPath : baseLinePath;
+      targetPath.moveTo(a.x * width, a.y * height);
+      targetPath.lineTo(b.x * width, b.y * height);
     }
   });
 
-  // Highlight primary connections
+  // Stroke background connections
+  ctx.lineWidth = 2;
+  ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
+  ctx.stroke(baseLinePath);
+
+  // Stroke primary connections
   ctx.lineWidth = 4;
   ctx.strokeStyle = color;
-  connections.forEach(([i, j]) => {
-    if (primaryJoints.includes(i) || primaryJoints.includes(j)) {
-      const a = landmarks[i];
-      const b = landmarks[j];
-      if (a && b && a.visibility > 0.5 && b.visibility > 0.5) {
-        ctx.beginPath();
-        ctx.moveTo(a.x * width, a.y * height);
-        ctx.lineTo(b.x * width, b.y * height);
-        ctx.stroke();
-      }
-    }
-  });
+  ctx.stroke(highlightPath);
 
   // 3. Draw Landmarks
   landmarks.forEach((lm, i) => {
