@@ -15,12 +15,23 @@ export const useBadges = () => {
   const [newlyEarned, setNewlyEarned] = useState<Badge | null>(null);
 
   useEffect(() => {
-    const saved = JSON.parse(localStorage.getItem('spectrax_badges') || '[]');
-    setEarnedBadges(saved);
+    try {
+      const saved = JSON.parse(localStorage.getItem('spectrax_badges') || '[]');
+      setEarnedBadges(Array.isArray(saved) ? saved : []);
+    } catch (error) {
+      console.error('Failed to parse badges from local storage', error);
+      setEarnedBadges([]);
+    }
   }, []);
 
   const checkAndAwardBadges = (stats: WorkoutStats) => {
-    const currentEarned = JSON.parse(localStorage.getItem('spectrax_badges') || '[]');
+    let currentEarned: string[] = [];
+    try {
+      const saved = JSON.parse(localStorage.getItem('spectrax_badges') || '[]');
+      currentEarned = Array.isArray(saved) ? saved : [];
+    } catch (error) {
+      console.error('Failed to parse badges from local storage', error);
+    }
     const newlyUnlocked: string[] = [];
 
     BADGES_CONFIG.forEach(badge => {
