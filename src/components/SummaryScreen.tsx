@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Award, Clock, RotateCcw, Video, Activity } from 'lucide-react';
-import { useWorkoutSync } from '../hooks/useWorkoutSync';
+import { useWorkoutSync } from "../hooks/useWorkoutSync";
 
 interface SummaryScreenProps {
   stats: { 
@@ -30,7 +30,6 @@ export const SummaryScreen: React.FC<SummaryScreenProps> = ({ stats, leveling, o
   const [accuracy, setAccuracy] = useState(0);
   const [isSavingWorkout, setIsSavingWorkout] = useState(false);
   const { addWorkout } = useWorkoutSync();
-
   useEffect(() => {
     // Animate accuracy ring on mount
     const timer = setTimeout(() => setAccuracy(stats.accuracy), 300);

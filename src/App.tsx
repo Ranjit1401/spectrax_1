@@ -18,6 +18,7 @@ import { SignUpScreen } from "./components/SignUpScreen";
 import { ForgotPasswordScreen } from "./components/ForgotPasswordScreen";
 import { useBadges } from "./hooks/useBadges";
 
+
 type Screen =
   | "welcome"
   | "calibration"
@@ -25,10 +26,11 @@ type Screen =
   | "summary"
   | "replay"
   | "history"
+  | "trophy"
   | "login"
   | "signup"
-  | "forgot-password"
-  | "trophy";
+  | "forgot-password";
+
 interface WorkoutStats {
   reps: number;
   totalReps: number;
@@ -115,8 +117,11 @@ function App() {
     }
   };
 
+  // Skip auth gate when Firebase is not configured (no .env)
+  const firebaseConfigured = !!import.meta.env.VITE_FIREBASE_API_KEY;
+
   // Show loading state while auth is being checked
-  if (authLoading) {
+  if (firebaseConfigured && authLoading) {
     return (
       <div className="loading-container">
         <div className="spinner"></div>
@@ -125,12 +130,11 @@ function App() {
     );
   }
 
-  // If not authenticated, show auth screens
-  if (!user) {
+  // If not authenticated and Firebase is configured, show auth screens
+  if (firebaseConfigured && !user) {
     const activeAuthScreen = ["login", "signup", "forgot-password"].includes(currentScreen)
       ? currentScreen
       : "login";
-
     return (
       <main className="spectrax-app">
         {activeAuthScreen === "login" && (
